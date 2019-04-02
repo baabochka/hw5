@@ -58,7 +58,9 @@ router.post('/deposit', upload.single('contents'), function(req, res){
   res.json({status: "OK"});
 });
 
-
+// router.get('/retrieve', function (req, res, next) {
+//   res.sendfile('public/retrieve.html');
+// });
 //retrieve
 router.get('/retrieve', function(req, res){
   fname = req.body.filename;
