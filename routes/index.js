@@ -62,9 +62,11 @@ router.post('/deposit', upload.single('contents'), function(req, res){
 //   res.sendfile('public/retrieve.html');
 // });
 //retrieve
-router.get('/retrieve', function(req, res){
-  fname = req.body.filename;
+router.get('/retrieve', function(req, res){ ///:filename
+  // fname = req.params.filename;
+  var fname = req.body.filename;
   var img = null;
+  console.log("filename requested: ", fname);
   const query = "SELECT fname FROM imgs WHERE key = fname";
   client.execute(query, function (err, result) {
     img = result.first();
