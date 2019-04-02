@@ -69,14 +69,15 @@ router.get('/retrieve', function(req, res){ ///:filename
   // var fname = req.body.filename;
 
   console.log("filename requested: ", req.query.filename);
-  const query = "SELECT contents FROM imgs WHERE filename = ?";
+  const query = "SELECT contents FROM hw5.imgs WHERE filename = ?";
   client.execute(query, [req.query.filename],function (err, result) {
     // var img = result.row[0];
     if(err) {
       res.json({status: 'ERROR'});
     }
 
-    res.type(req.query.filename.split('.')[1]).send(result.row[0].contents);
+    res.set('Content-Type',req.query.filename.split('.')[1]);
+    res.send(result.row[0].contents);
     // res.send({status: "OK", contents: img});
     //The row is an Object with column names as property keys.
     // console.log('My file is this: ', img);
