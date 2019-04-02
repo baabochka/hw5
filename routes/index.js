@@ -71,8 +71,12 @@ router.get('/retrieve', function(req, res){ ///:filename
   console.log("filename requested: ", req.query.filename);
   const query = "SELECT contents FROM imgs WHERE filename = ?";
   client.execute(query, [req.query.filename],function (err, result) {
-    var img = result.row[0];
-    res.type(req.query.filename.split('.')[1]).send({status: "OK", contents: img.contents});
+    // var img = result.row[0];
+    if(err) {
+      res.json({status: 'ERROR'});
+    }
+
+    res.type(req.query.filename.split('.')[1]).send(img.contents);
     // res.send({status: "OK", contents: img});
     //The row is an Object with column names as property keys.
     // console.log('My file is this: ', img);
