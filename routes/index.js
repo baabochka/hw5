@@ -46,10 +46,13 @@ router.post('/deposit', upload.single('contents'), function(req, res){
 
     try {
       const query = 'INSERT INTO imgs (filename, contents) VALUES (?, ?)';
+      console.log("filename: ", fname, "content: ", cont);
       const params = [fname, req.file.buffer];
       client.execute(query, params, {prepare: true}, function (err) {
         // assert.ifError(err);
-
+        if(err) {
+          console.log("Couldn't deposit image into database.");
+        }
       });
     } catch (e) {
       res.json({status: 'ERROR'});
@@ -63,8 +66,8 @@ router.post('/deposit', upload.single('contents'), function(req, res){
 // });
 //retrieve
 router.get('/retrieve', function(req, res){ ///:filename
-  // fname = req.params.filename;
-  var fname = req.body.filename;
+  var fname = req.params.filename;
+  // var fname = req.body.filename;
   var img = null;
   console.log("filename requested: ", fname);
   const query = "SELECT fname FROM imgs WHERE key = fname";
