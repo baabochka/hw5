@@ -3,7 +3,7 @@ var router = express.Router();
 var assert = require('assert')
 
 var multer  = require('multer')
-var upload = multer({})
+var upload = multer()
 const cassandra = require('cassandra-driver');
 
 // const client = new cassandra.Client({
@@ -46,9 +46,8 @@ router.post('/deposit', upload.single('contents'), function(req, res){
 
     try {
       const query = 'INSERT INTO imgs (filename, contents) VALUES (?, ?)';
-      console.log("filename: ", fname, "content: ", cont);
-      const params = [fname, req.file.buffer];
-      client.execute(query, params, {prepare: true}, function (err) {
+      const params = {filename: fname, contents: req.file.buffer};
+      client.execute(query, params, {prepare: true}, function (err, result) {
         // assert.ifError(err);
         if(err) {
           console.log("Couldn't deposit image into database.");
@@ -68,17 +67,18 @@ router.post('/deposit', upload.single('contents'), function(req, res){
 router.get('/retrieve', function(req, res){ ///:filename
   var fname = req.params.filename;
   // var fname = req.body.filename;
-  var img = null;
+
   console.log("filename requested: ", fname);
   const query = "SELECT fname FROM imgs WHERE key = fname";
   client.execute(query, function (err, result) {
-    img = result.first();
+    var img = result.first();
+    res.type(req.query.filename.split('/')[1]).send({status: "OK", contents: img});
+    // res.send({status: "OK", contents: img});
     //The row is an Object with column names as property keys.
-    console.log('My file is this: ', img);
+    // console.log('My file is this: ', img);
   });
-  console.log("I got filename: ", fname);
-  res.header("Content-Type", "image/jpeg");
-  res.send({status: "OK", contents: img});
+  // console.log("I got filename: ", fname);
+
 });
 
 
