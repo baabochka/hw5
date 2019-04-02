@@ -62,9 +62,10 @@ router.post('/deposit', upload.single('contents'), function(req, res){
 //retrieve
 router.get('/retrieve', function(req, res){
   fname = req.body.filename;
-  const query = "SELECT filename FROM imgs WHERE key = fname";
+  var img = null;
+  const query = "SELECT fname FROM imgs WHERE key = fname";
   client.execute(query, function (err, result) {
-    var img = result.first();
+    img = result.first();
     //The row is an Object with column names as property keys.
     console.log('My file is this: ', img);
   });
