@@ -76,7 +76,7 @@ router.get('/retrieve', function(req, res){ ///:filename
       res.json({status: 'ERROR'});
     }
 
-    res.type(req.query.filename.split('.')[1]).send(img.contents);
+    res.type(req.query.filename.split('.')[1]).send(result.row[0].contents);
     // res.send({status: "OK", contents: img});
     //The row is an Object with column names as property keys.
     // console.log('My file is this: ', img);
