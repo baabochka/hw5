@@ -78,7 +78,7 @@ router.get('/retrieve', function(req, res){ ///:filename
   });
   console.log("I got filename: ", fname);
   res.header("Content-Type", "image/jpg");
-  res.json({status: "OK", contents: img});
+  res.send({status: "OK", contents: img});
 });
 
 
