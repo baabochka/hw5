@@ -18,7 +18,8 @@ const cassandra = require('cassandra-driver');
 
 var dbConfig = {
   contactPoints : ['127.0.0.1'],
-  keyspace:'hw5'
+  keyspace:'hw5',
+  localDataCenter: 'datacenter1'
 };
 
 var client = new cassandra.Client(dbConfig);
@@ -47,7 +48,7 @@ router.post('/deposit', upload.single('contents'), function(req, res){
       const query = 'INSERT INTO imgs (filename, contents) VALUES (?, ?)';
       const params = [fname, req.file.buffer];
       client.execute(query, params, {prepare: true}, function (err) {
-        assert.ifError(err);
+        // assert.ifError(err);
 
       });
     } catch (e) {
@@ -68,7 +69,7 @@ router.get('/retrieve', function(req, res){
     console.log('My file is this: ', img);
   });
   console.log("I got filename: ", fname);
-  res.json({status: "OK"});
+  res.json({status: "OK", contents: img});
 });
 
 
